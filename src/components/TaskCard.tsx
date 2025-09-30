@@ -7,6 +7,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import TaskModal from "../components/TaskModal"; // <- new modal
+import { toast } from "sonner";
 
 // Priority badge styles (same as before)
 const priorityColors: Record<string, string> = {
@@ -21,12 +22,13 @@ export default function TaskCard({ task }: { task: Task }) {
 
   const deleteMutation = useMutation({
     mutationFn: async () => api.delete(`/tasks/${task.id}`),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
-    },
-    onError: () => {
-      alert("❌ Failed to delete task. Please try again.");
-    },
+onSuccess: () => {
+  queryClient.invalidateQueries({ queryKey: ["tasks"] });
+  toast.success("Task deleted");
+},
+onError: () => {
+  toast.error("Failed to delete task");
+},
   });
 
   const handleDelete = () => {

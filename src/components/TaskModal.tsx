@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { Task } from "@/types/task";
+import { toast } from "sonner";
 
 const schema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -51,16 +52,18 @@ export default function TaskModal({
     });
   }, [task, reset]);
 
-  const updateMutation = useMutation({
-    mutationFn: (data: FormData) => api.put(`/tasks/${task.id}`, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
-      onClose();
-    },
-    onError: () => {
-      alert("❌ Failed to update task. Please try again.");
-    },
-  });
+const updateMutation = useMutation({
+  mutationFn: (data: FormData) => api.put(`/tasks/${task.id}`, data),
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    toast.success("Task updated");   // ✅ feedback to user
+    onClose();
+  },
+  onError: () => {
+    toast.error("❌ Failed to update task. Please try again."); // ✅ replaces alert
+  },
+});
+
 
   return (
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">

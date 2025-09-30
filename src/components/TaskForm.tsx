@@ -4,6 +4,8 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
+import { toast } from "sonner";
+
 const schema = z.object({
 title: z.string().min(1, 'Title is required'),
 description: z.string().optional(),
@@ -24,14 +26,15 @@ defaultValues: { status: 'TODO', priority: 'MEDIUM' },
 
 
 const mutation = useMutation({
-mutationFn: (data: FormData) => api.post('/tasks', data),
-onSuccess: () => {
-queryClient.invalidateQueries({ queryKey: ['tasks'] });
-reset({ title: '', description: '', status: 'TODO', priority: 'MEDIUM' });
-},
-onError: () => {
-alert('❌ Failed to save task. Please try again.');
-},
+  mutationFn: (data: FormData) => api.post("/tasks", data),
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    reset();
+    toast.success("Task created");
+  },
+  onError: () => {
+    toast.error("Failed to save task. Please try again.");
+  },
 });
 
 
