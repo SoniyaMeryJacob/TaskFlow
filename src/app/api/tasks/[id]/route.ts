@@ -1,3 +1,6 @@
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 import { z } from "zod";
 import { update, remove } from "@/lib/db";
 
@@ -8,9 +11,16 @@ const PatchSchema = z.object({
   priority: z.enum(["LOW", "MEDIUM", "HIGH"]).optional(),
 });
 
-export async function PUT(req: Request, context: any) {
+// Helper to get the last path segment as id
+function getIdFromUrl(req: Request) {
+  const { pathname } = new URL(req.url);
+  const parts = pathname.split("/");
+  return parts[parts.length - 1];
+}
+
+export async function PUT(req: Request) {
   try {
-    const { id } = context.params;              // ✅ read params without fancy TS types
+    const id = getIdFromUrl(req);
     const body = await req.json();
     const patch = PatchSchema.parse(body);
 
@@ -23,8 +33,8 @@ export async function PUT(req: Request, context: any) {
   }
 }
 
-export async function DELETE(_req: Request, context: any) {
-  const { id } = context.params;
+export async function DELETE(req: Request) {
+  const id = getIdFromUrl(req);
   const ok = await remove(id);
   if (!ok) return Response.json({ error: "Not found" }, { status: 404 });
   return Response.json({ ok: true });
