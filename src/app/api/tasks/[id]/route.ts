@@ -8,7 +8,7 @@ const PatchSchema = z.object({
   priority: z.enum(["LOW", "MEDIUM", "HIGH"]).optional(),
 });
 
-export async function PUT(req: Request, context: { params: { id: string } }) {
+export async function PUT(req: Request, context: any) {
   try {
     const { id } = context.params;              // ✅ read params without fancy TS types
     const body = await req.json();
@@ -23,7 +23,7 @@ export async function PUT(req: Request, context: { params: { id: string } }) {
   }
 }
 
-export async function DELETE(_req: Request, context: { params: { id: string } }) {
+export async function DELETE(_req: Request, context: any) {
   const { id } = context.params;
   const ok = await remove(id);
   if (!ok) return Response.json({ error: "Not found" }, { status: 404 });
