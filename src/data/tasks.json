@@ -1,0 +1,9 @@
+[
+  {
+    "id": "1",
+    "title": "Setup project",
+    "description": "Initialize Next.js project",
+    "status": "TODO",
+    "priority": "HIGH"
+  }
+]
