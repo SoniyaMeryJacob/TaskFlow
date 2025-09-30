@@ -2,7 +2,7 @@
   {
     "id": "1",
     "title": "Setup project",
-    "description": "Initialize Next.js project",
+    "description": "Initialize Next.js project with TypeScript",
     "status": "TODO",
     "priority": "HIGH"
   }
