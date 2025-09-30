@@ -6,7 +6,11 @@ It allows users to create, edit, delete, and drag tasks across columns ("To Do",
 This project was designed as a take-home task to demonstrate modern React/Next.js development, state management, API handling, and user experience.
 
 ---
+ ## 🌍 Deployment
 
+  This is now live on :
+  👉https://task-flow-phi-eosin.vercel.app/
+---
 ## ✨ Features
 
 ### Core Requirements
@@ -44,4 +48,33 @@ This project was designed as a take-home task to demonstrate modern React/Next.j
 
 ---
 
-## 📂 Project Structure
+## 🚀 Getting Started
+
+1. Clone the repository:
+```bash
+git clone https://github.com/SoniyaMeryJacob/TaskFlow.git
+```
+2. Move into project
+```bash
+cd taskflow
+```
+3. Install dependencies
+```bash
+npm install
+# or
+yarn install
+```
+4. Run the development server:
+```bash
+npm run dev
+# or
+yarn dev
+```
+5. Open [http://localhost:3000/](http://localhost:3000/) to view the app.
+---
+
+
+---
+## ⭐️ Show your support 
+
+Give a ⭐️ if you like this project!
