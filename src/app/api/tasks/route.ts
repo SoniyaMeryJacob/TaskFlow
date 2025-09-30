@@ -1,27 +1,29 @@
-import { NextResponse } from "next/server";
-import { v4 as uuidv4 } from "uuid";
-import tasks from "@/data/tasks.json";
-import { Task } from "@/types/task";
+import { NextRequest, NextResponse } from 'next/server';
+import { getAll, create } from '@/lib/db';
+import { z } from 'zod';
 
-let taskList: Task[] = tasks.map(task => ({
-  ...task,
-  status: task.status as Task["status"],
-  priority: task.priority as Task["priority"],
-}));
+
+const TaskSchema = z.object({
+title: z.string().min(1),
+description: z.string().optional(),
+status: z.enum(['TODO', 'IN_PROGRESS', 'DONE']),
+priority: z.enum(['LOW', 'MEDIUM', 'HIGH']).optional(),
+});
+
 
 export async function GET() {
-  return NextResponse.json(taskList);
+const tasks = await getAll();
+return NextResponse.json(tasks);
 }
 
-export async function POST(req: Request) {
-  const body = await req.json();
-  const newTask: Task = {
-    id: uuidv4(),
-    title: body.title,
-    description: body.description || "",
-    status: body.status || "TODO",
-    priority: body.priority || "MEDIUM",
-  };
-  taskList.push(newTask);
-  return NextResponse.json(newTask, { status: 201 });
+
+export async function POST(req: NextRequest) {
+try {
+const body = await req.json();
+const parsed = TaskSchema.parse(body);
+const task = await create(parsed);
+return NextResponse.json(task, { status: 201 });
+} catch (e) {
+return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
+}
 }
